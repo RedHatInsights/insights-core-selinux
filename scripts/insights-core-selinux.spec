@@ -5,7 +5,7 @@
 %global selinuxtype targeted
 
 Name:           insights-core-selinux
-Version:        3.6.0
+Version:        3.7.0
 Release:        1%{?dist}
 Summary:        Insights Core SELinux policy
 
