@@ -15,6 +15,7 @@ Source0:        %{name}-%{version}.tar.gz
 
 Requires:           selinux-policy >= %{selinux_policy_version}
 Requires:           selinux-policy-%{selinuxtype} >= %{selinux_policy_version}
+Requires:           insights-client
 Requires(post):     libselinux-utils
 Requires(post):     policycoreutils
 Requires(post):     selinux-policy-%{selinuxtype}
