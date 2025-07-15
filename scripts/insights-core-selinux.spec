@@ -1,7 +1,7 @@
 %define distro redhat
 %global debug_package %{nil}
 %global modulename insights_core
-%global selinux_policy_version 40.13.31
+%global selinux_policy_version 42.1.1
 %global selinuxtype targeted
 
 Name:           insights-core-selinux
