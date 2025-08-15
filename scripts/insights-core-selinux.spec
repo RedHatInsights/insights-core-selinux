@@ -13,6 +13,9 @@ License:        Apache-2.0
 URL:            https://github.com/RedHatInsights/insights-core-selinux
 Source0:        %{name}-%{version}.tar.gz
 
+BuildRequires:  selinux-policy-devel
+BuildArch:      noarch
+
 Requires:           selinux-policy >= %{selinux_policy_version}
 Requires:           selinux-policy-%{selinuxtype} >= %{selinux_policy_version}
 Requires(post):     libselinux-utils
@@ -21,11 +24,6 @@ Requires(post):     selinux-policy-%{selinuxtype}
 Requires(post):     selinux-policy-base >= %{selinux_policy_version}
 Requires(postun):   libselinux-utils
 Requires(postun):   policycoreutils
-
-BuildRequires:      pkgconfig(systemd)
-BuildRequires:      selinux-policy-devel
-
-BuildArch:      noarch
 
 %description
 Insights Core SELinux policy module
