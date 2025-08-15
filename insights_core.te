@@ -282,6 +282,11 @@ optional_policy(`
 ')
 
 optional_policy(`
+	rhcd_read_fifo_files(insights_core_t)
+	rhcd_write_fifo_files(insights_core_t)
+')
+
+optional_policy(`
 	rhsmcertd_domtrans(insights_core_t)
 	rhsmcertd_manage_config_files(insights_core_t)
 	rhsmcertd_manage_lib_files(insights_core_t)
