@@ -14,4 +14,4 @@ cp insights_core.* Makefile LICENSE "$distgit_dir/insights-core-selinux-$version
 
 rpmbuild --define "_topdir $rpmbuild_dir" -ba "scripts/insights-core-selinux.spec"
 
-cp $rpmbuild_dir/RPMS/noarch/*.rpm "./" $rpmbuild_dir/SRPMS/*.rpm "./"
+cp $rpmbuild_dir/RPMS/noarch/*.rpm $rpmbuild_dir/SRPMS/*.rpm "./"

@@ -2,6 +2,29 @@
 
 ########################################
 ## <summary>
+##      Execute container in the container domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##      Domain allowed to transition.
+## </summary>
+## </param>
+#
+ifndef(`container_runtime_domtrans',`
+	interface(`container_runtime_domtrans',`
+		gen_require(`
+			type container_runtime_t, container_runtime_exec_t;
+			type container_runtime_tmpfs_t;
+		')
+
+		corecmd_search_bin($1)
+		domtrans_pattern($1, container_runtime_exec_t, container_runtime_t)
+		allow container_runtime_t $1:fifo_file setattr;
+	')
+')
+
+########################################
+## <summary>
 ##	Allow explicit transition to insights_core_t domain.
 ## </summary>
 ## <param name="domain">

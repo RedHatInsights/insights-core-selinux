@@ -1,7 +1,7 @@
 %define distro redhat
 %global debug_package %{nil}
 %global modulename insights_core
-%global selinux_policy_version 40.13.31
+%global selinux_policy_version 42.1.1
 %global selinuxtype targeted
 
 Name:           insights-core-selinux
@@ -13,6 +13,9 @@ License:        Apache-2.0
 URL:            https://github.com/RedHatInsights/insights-core-selinux
 Source0:        %{name}-%{version}.tar.gz
 
+BuildArch:      noarch
+BuildRequires:  selinux-policy-devel
+
 Requires:           selinux-policy >= %{selinux_policy_version}
 Requires:           selinux-policy-%{selinuxtype} >= %{selinux_policy_version}
 Requires(post):     libselinux-utils
@@ -22,10 +25,7 @@ Requires(post):     selinux-policy-base >= %{selinux_policy_version}
 Requires(postun):   libselinux-utils
 Requires(postun):   policycoreutils
 
-BuildRequires:      pkgconfig(systemd)
-BuildRequires:      selinux-policy-devel
 
-BuildArch:      noarch
 
 %description
 Insights Core SELinux policy module
