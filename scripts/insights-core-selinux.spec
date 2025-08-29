@@ -1,8 +1,13 @@
 %define distro redhat
 %global debug_package %{nil}
 %global modulename insights_core
-%global selinux_policy_version 42.1.1
 %global selinuxtype targeted
+%if 0%{?rhel} == 9
+%global selinux_policy_version 38.1.60
+%endif
+%if 0%{?rhel} == 10
+%global selinux_policy_version 42.1.1
+%endif
 
 Name:           insights-core-selinux
 Version:        3.7.0
@@ -24,8 +29,6 @@ Requires(post):     selinux-policy-%{selinuxtype}
 Requires(post):     selinux-policy-base >= %{selinux_policy_version}
 Requires(postun):   libselinux-utils
 Requires(postun):   policycoreutils
-
-
 
 %description
 Insights Core SELinux policy module
@@ -58,7 +61,6 @@ install -D -p -m 0644 %{modulename}.if %{buildroot}%{_datadir}/selinux/devel/inc
 %{_datadir}/selinux/devel/include/distributed/%{modulename}.if
 %ghost %verify(not md5 size mode mtime) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/%{modulename}
 %license LICENSE
-
 
 %changelog
 * Wed May 21 2025 <xiangceliu@redhat.com>
