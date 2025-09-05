@@ -300,6 +300,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	sap_unconfined_domtrans(insights_core_t)
+')
+
+optional_policy(`
 	setroubleshoot_dbus_chat(insights_core_t)
 	setroubleshoot_stream_connect(insights_core_t)
 ')
