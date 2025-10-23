@@ -266,6 +266,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+	mysql_stream_connect(insights_core_t)
+')
+
+optional_policy(`
 	networkmanager_dbus_chat(insights_core_t)
 ')
 
