@@ -1,0 +1,25 @@
+upstream_package_name: insights-core-selinux
+downstream_package_name: insights-core-selinux
+specfile_path: scripts/insights-core-selinux.spec
+
+actions:
+  post-upstream-clone:
+    - mkdir insights-core-selinux
+    - (cd dist && make)
+    - tar zcf insights-core-selinux.tar.gz ./dist)
+  get-current-version:
+    - awk '/^Version:/ {print $2;}' scripts/insights-core-selinux.spec
+  create-archive:
+    - bash -c 'ls dist/insights*.tar.*'
+  fix-spec-file:
+    - echo 'nothing to fix'
+
+jobs:
+  - job: copr_build
+    trigger: pull_request
+    branch: master
+    targets:
+      - rhel-9
+      - rhel-10
+      - centos-stream-10-x86_64
+      - fedora-all

@@ -1,8 +1,7 @@
-set -eux
+set -euxo pipefail
 
-tmpdir="$(mktemp -d)"
-rpmbuild_dir="$tmpdir"
-distgit_dir="$tmpdir/SOURCES"
+rpmbuild_dir="$(mktemp -d)"
+distgit_dir="$rpmbuild_dir/SOURCES"
 mkdir -p "$distgit_dir"
 
 version=`grep "Version:" scripts/insights-core-selinux.spec | awk '{print $2}'`
