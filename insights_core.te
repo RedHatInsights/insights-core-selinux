@@ -191,9 +191,11 @@ optional_policy(`
 ')
 
 optional_policy(`
-	gnome_search_gconf(insights_core_t)
-	gnome_manage_generic_cache_files(insights_core_t)
+	gnome_delete_home_config_dirs(insights_core_t)
 	gnome_filetrans_cert_home_content(insights_core_t)
+	gnome_manage_generic_cache_files(insights_core_t)
+	gnome_manage_home_config(insights_core_t)
+	gnome_search_gconf(insights_core_t)
 ')
 
 optional_policy(`
