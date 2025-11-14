@@ -2,11 +2,70 @@
 
 ########################################
 ## <summary>
-##      Execute container in the container domain.
+##     Allow explicit transition to insights_core_t domain.
 ## </summary>
 ## <param name="domain">
 ## <summary>
-##      Domain allowed to transition.
+##     Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`insights_core_domtrans',`
+	gen_require(`
+		type insights_core_t;
+	')
+	allow $1 insights_core_t: process transition;
+	allow insights_core_t $1:fd use;
+	allow insights_core_t $1:fifo_file rw_file_perms;
+	allow insights_core_t $1:process sigchld;
+	allow insights_core_t $1:dir search_dir_perms;
+')
+
+########################################
+## <summary>
+##     Write to an insights_core unnamed pipe.
+## </summary>
+## <param name="domain">
+## <summary>
+##     Domain allowed access.
+## </summary>
+## </param>
+#
+interface(`insights_core_write_pipes',`
+	gen_require(`
+		type insights_core_t;
+	')
+	allow $1 insights_core_t:fifo_file write_fifo_file_perms;
+')
+
+
+########################################
+## <summary>
+##     Read insights_client lib files.
+## </summary>
+## <param name="domain">
+## <summary>
+##     Domain allowed access.
+## </summary>
+## </param>
+#
+interface(`insights_core_read_lib_files',`
+	gen_require(`
+		type insights_core_var_lib_t;
+	')
+	files_search_var_lib($1)
+	read_files_pattern($1, insights_core_var_lib_t, insights_core_var_lib_t)
+	allow $1 insights_core_var_lib_t:file map;
+')
+
+
+########################################
+## <summary>
+##     Execute container in the container domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##     Domain allowed to transition.
 ## </summary>
 ## </param>
 #
@@ -24,76 +83,13 @@ ifndef(`container_runtime_domtrans',`
 
 ########################################
 ## <summary>
-##	Allow explicit transition to insights_core_t domain.
+##     Allow the domain to use the io_uring API via an inherited file
+##     descriptor.
 ## </summary>
 ## <param name="domain">
-##	<summary>
-##	Domain allowed to transition.
-##	</summary>
-## </param>
-#
-ifndef(`insights_core_domtrans',`
-	interface(`insights_core_domtrans',`
-		gen_require(`
-			type insights_core_t;
-		')
-		allow $1 insights_core_t: process transition;
-		allow insights_core_t $1:fd use;
-		allow insights_core_t $1:fifo_file rw_file_perms;
-		allow insights_core_t $1:process sigchld;
-		allow insights_core_t $1:dir search_dir_perms;
-	')
-')
-
-########################################
 ## <summary>
-##	Write to an insights_core unnamed pipe.
+##     Domain allowed access.
 ## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-ifndef(`insights_core_write_pipes',`
-	interface(`insights_core_write_pipes',`
-		gen_require(`
-			type insights_core_t;
-		')
-		allow $1 insights_core_t:fifo_file write_fifo_file_perms;
-	')
-')
-
-########################################
-## <summary>
-##	Read insights_client lib files.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
-## </param>
-#
-ifndef(`insights_core_read_lib_files',`
-	interface(`insights_core_read_lib_files',`
-		gen_require(`
-			type insights_core_var_lib_t;
-		')
-		files_search_var_lib($1)
-		read_files_pattern($1, insights_core_var_lib_t, insights_core_var_lib_t)
-		allow $1 insights_core_var_lib_t:file map;
-	')
-')
-
-########################################
-## <summary>
-##	Allow the domain to use the io_uring API via an inherited file
-##	descriptor.
-## </summary>
-## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
 ## </param>
 #
 ifndef(`kernel_io_uring_use_inherited',`
@@ -107,12 +103,12 @@ ifndef(`kernel_io_uring_use_inherited',`
 
 ########################################
 ## <summary>
-##	Allow the domain to use the io_uring API.
+##     Allow the domain to use the io_uring API.
 ## </summary>
 ## <param name="domain">
-##	<summary>
-##	Domain allowed access.
-##	</summary>
+## <summary>
+##     Domain allowed access.
+## </summary>
 ## </param>
 #
 ifndef(`kernel_io_uring_use',`
@@ -127,11 +123,11 @@ ifndef(`kernel_io_uring_use',`
 
 ########################################
 ## <summary>
-##	Execute sap in sap unconfined domain.
+##     Execute sap in sap unconfined domain.
 ## </summary>
 ## <param name="domain">
 ## <summary>
-##	Domain allowed to transition.
+##     Domain allowed to transition.
 ## </summary>
 ## </param>
 #
