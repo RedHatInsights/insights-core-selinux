@@ -302,6 +302,7 @@ optional_policy(`
 optional_policy(`
 	rpm_append_log(insights_core_t)
 	rpm_domtrans(insights_core_t)
+    rpm_manage_cache(insights_core_t)
 	rpm_setattr_db_files(insights_core_t)
 ')
 
