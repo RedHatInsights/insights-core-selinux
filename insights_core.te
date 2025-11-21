@@ -295,6 +295,7 @@ optional_policy(`
 	rhsmcertd_domtrans(insights_core_t)
 	rhsmcertd_manage_config_files(insights_core_t)
 	rhsmcertd_manage_lib_files(insights_core_t)
+    rhsmcertd_manage_pid_files(insights_core_t)
 	rhsmcertd_append_log(insights_core_t)
 	rhsmcertd_create_log(insights_core_t)
 ')
