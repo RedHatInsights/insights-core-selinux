@@ -11,14 +11,14 @@
 ## </param>
 #
 interface(`insights_core_domtrans',`
-	gen_require(`
-		type insights_core_t;
-	')
-	allow $1 insights_core_t: process transition;
-	allow insights_core_t $1:fd use;
-	allow insights_core_t $1:fifo_file rw_file_perms;
-	allow insights_core_t $1:process sigchld;
-	allow insights_core_t $1:dir search_dir_perms;
+    gen_require(`
+        type insights_core_t;
+    ')
+    allow $1 insights_core_t: process transition;
+    allow insights_core_t $1:fd use;
+    allow insights_core_t $1:fifo_file rw_file_perms;
+    allow insights_core_t $1:process sigchld;
+    allow insights_core_t $1:dir search_dir_perms;
 ')
 
 ########################################
@@ -32,10 +32,10 @@ interface(`insights_core_domtrans',`
 ## </param>
 #
 interface(`insights_core_write_pipes',`
-	gen_require(`
-		type insights_core_t;
-	')
-	allow $1 insights_core_t:fifo_file write_fifo_file_perms;
+    gen_require(`
+        type insights_core_t;
+    ')
+    allow $1 insights_core_t:fifo_file write_fifo_file_perms;
 ')
 
 
@@ -50,12 +50,12 @@ interface(`insights_core_write_pipes',`
 ## </param>
 #
 interface(`insights_core_read_lib_files',`
-	gen_require(`
-		type insights_core_var_lib_t;
-	')
-	files_search_var_lib($1)
-	read_files_pattern($1, insights_core_var_lib_t, insights_core_var_lib_t)
-	allow $1 insights_core_var_lib_t:file map;
+    gen_require(`
+        type insights_core_var_lib_t;
+    ')
+    files_search_var_lib($1)
+    read_files_pattern($1, insights_core_var_lib_t, insights_core_var_lib_t)
+    allow $1 insights_core_var_lib_t:file map;
 ')
 
 
@@ -70,15 +70,15 @@ interface(`insights_core_read_lib_files',`
 ## </param>
 #
 ifndef(`container_runtime_domtrans',`
-	interface(`container_runtime_domtrans',`
-		gen_require(`
-			type container_runtime_t, container_runtime_exec_t;
-			type container_runtime_tmpfs_t;
-		')
-		corecmd_search_bin($1)
-		domtrans_pattern($1, container_runtime_exec_t, container_runtime_t)
-		allow container_runtime_t $1:fifo_file setattr;
-	')
+    interface(`container_runtime_domtrans',`
+        gen_require(`
+            type container_runtime_t, container_runtime_exec_t;
+            type container_runtime_tmpfs_t;
+        ')
+        corecmd_search_bin($1)
+        domtrans_pattern($1, container_runtime_exec_t, container_runtime_t)
+        allow container_runtime_t $1:fifo_file setattr;
+    ')
 ')
 
 ########################################
@@ -93,12 +93,12 @@ ifndef(`container_runtime_domtrans',`
 ## </param>
 #
 ifndef(`kernel_io_uring_use_inherited',`
-	interface(`kernel_io_uring_use_inherited',`
-		gen_require(`
-			type io_uring_t;
-		')
-		allow $1 io_uring_t:anon_inode { getattr read write map };
-	')
+    interface(`kernel_io_uring_use_inherited',`
+        gen_require(`
+            type io_uring_t;
+        ')
+        allow $1 io_uring_t:anon_inode { getattr read write map };
+    ')
 ')
 
 ########################################
@@ -112,13 +112,13 @@ ifndef(`kernel_io_uring_use_inherited',`
 ## </param>
 #
 ifndef(`kernel_io_uring_use',`
-	interface(`kernel_io_uring_use',`
-		gen_require(`
-			type io_uring_t;
-		')
-		kernel_io_uring_use_inherited($1)
-		allow $1 io_uring_t:anon_inode create;
-	')
+    interface(`kernel_io_uring_use',`
+        gen_require(`
+            type io_uring_t;
+        ')
+        kernel_io_uring_use_inherited($1)
+        allow $1 io_uring_t:anon_inode create;
+    ')
 ')
 
 ########################################
@@ -132,11 +132,11 @@ ifndef(`kernel_io_uring_use',`
 ## </param>
 #
 ifndef(`sap_unconfined_domtrans',`
-	interface(`sap_unconfined_domtrans',`
-		gen_require(`
-			type sap_unconfined_t, sap_exec_t;
-		')
-		corecmd_search_bin($1)
-		domtrans_pattern($1, sap_exec_t, sap_unconfined_t)
-	')
+    interface(`sap_unconfined_domtrans',`
+        gen_require(`
+            type sap_unconfined_t, sap_exec_t;
+        ')
+        corecmd_search_bin($1)
+        domtrans_pattern($1, sap_exec_t, sap_unconfined_t)
+    ')
 ')
