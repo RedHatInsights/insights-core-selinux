@@ -308,6 +308,15 @@ optional_policy(`
 ')
 
 optional_policy(`
+    gen_require(`
+        type rpm_t;
+        class process signal;
+    ')
+
+    allow insights_core_t rpm_t:process signal;
+')
+
+optional_policy(`
     samba_manage_var_dirs(insights_core_t)
     samba_manage_var_files(insights_core_t)
 ')
