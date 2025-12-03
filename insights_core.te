@@ -123,6 +123,7 @@ fs_get_all_fs_quotas(insights_core_t)
 fs_getattr_all_fs(insights_core_t)
 fs_getattr_nsfs_files(insights_core_t)
 fs_read_configfs_dirs(insights_core_t)
+fs_rw_inherited_tmpfs_files(insights_core_t)
 
 storage_raw_read_fixed_disk(insights_core_t)
 
