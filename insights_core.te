@@ -23,6 +23,9 @@ files_tmp_file(insights_core_tmp_t)
 # insights_core local policy
 #
 
+# dontaudit rule
+dontaudit insights_core_t self:capability sys_resource;
+
 #permissive insights_core_t;
 
 allow insights_core_t self:capability { dac_read_search setgid sys_admin sys_rawio};
