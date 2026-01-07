@@ -61,6 +61,8 @@ append_files_pattern(insights_core_t, insights_core_var_log_t, insights_core_var
 create_files_pattern(insights_core_t, insights_core_var_log_t, insights_core_var_log_t)
 logging_log_filetrans(insights_core_t, insights_core_var_log_t, dir)
 
+relabel_dirs_pattern(insights_core_t, insights_core_tmp_t, insights_core_tmp_t)
+relabel_files_pattern(insights_core_t, insights_core_tmp_t, insights_core_tmp_t)
 
 ### Interactions with insights-client
 optional_policy(`
@@ -104,6 +106,7 @@ dev_read_netcontrol(insights_core_t)
 dev_read_rand(insights_core_t)
 dev_read_sysfs(insights_core_t)
 dev_rw_lvm_control(insights_core_t)
+dev_rw_papr_sysparm(insights_core_t)
 
 domain_getattr_all_sockets(insights_core_t)
 domain_connect_all_stream_sockets(insights_core_t)
@@ -344,6 +347,7 @@ optional_policy(`
     systemd_dbus_chat_timedated(insights_core_t)
     systemd_dbus_chat_localed(insights_core_t)
     systemd_exec_notify(insights_core_t)
+    systemd_passwd_agent_domtrans(insights_core_t)
     systemd_status_all_unit_files(insights_core_t)
     systemd_userdbd_stream_connect(insights_core_t)
 ')
