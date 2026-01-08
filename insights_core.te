@@ -106,6 +106,7 @@ dev_read_netcontrol(insights_core_t)
 dev_read_rand(insights_core_t)
 dev_read_sysfs(insights_core_t)
 dev_rw_lvm_control(insights_core_t)
+dev_rw_papr_sysparm(insights_core_t)
 
 domain_getattr_all_sockets(insights_core_t)
 domain_connect_all_stream_sockets(insights_core_t)
