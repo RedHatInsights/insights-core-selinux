@@ -353,8 +353,10 @@ optional_policy(`
 
 optional_policy(`
     userdom_search_user_tmp_dirs(insights_core_t)
+    userdom_use_inherited_user_ptys(insights_core_t)
     userdom_user_tmp_filetrans(insights_core_t, insights_core_tmp_t, dir)
     userdom_view_all_users_keys(insights_core_t)
+    userdom_watch_tmp_dirs(insights_core_t)
 ')
 
 optional_policy(`
