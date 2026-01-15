@@ -66,6 +66,12 @@ relabel_files_pattern(insights_core_t, insights_core_tmp_t, insights_core_tmp_t)
 
 ### Interactions with insights-client
 optional_policy(`
+    gen_require(`
+        type insights_client_unit_file_t;
+    ')
+
+    allow insights_core_t insights_client_unit_file_t:service { start, stop };
+
     insights_client_filetrans_named_content(insights_core_t)
     insights_client_create_config(insights_core_t)
     insights_client_create_lib_dirs(insights_core_t)
@@ -215,8 +221,9 @@ optional_policy(`
 ')
 
 optional_policy(`
-    init_status(insights_core_t)
+    init_reload_services(insights_core_t)
     init_rw_stream_sockets(insights_core_t)
+    init_status(insights_core_t)
 ')
 
 optional_policy(`
