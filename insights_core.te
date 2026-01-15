@@ -70,8 +70,6 @@ optional_policy(`
         type insights_client_unit_file_t;
     ')
 
-    allow insights_core_t insights_client_unit_file_t:service { start stop };
-
     insights_client_filetrans_named_content(insights_core_t)
     insights_client_create_config(insights_core_t)
     insights_client_create_lib_dirs(insights_core_t)
@@ -81,6 +79,7 @@ optional_policy(`
     insights_client_append_log(insights_core_t)
     insights_client_manage_tmp_dirs(insights_core_t)
     insights_client_manage_tmp_files(insights_core_t)
+    allow insights_core_t insights_client_unit_file_t:service { start stop };
 ')
 
 kernel_dgram_send(insights_core_t)
@@ -95,7 +94,6 @@ kernel_read_ring_buffer(insights_core_t)
 kernel_read_security_state(insights_core_t)
 kernel_read_software_raid_state(insights_core_t)
 kernel_read_sysctl(insights_core_t)
-
 corecmd_bin_entry_type(insights_core_t)
 corecmd_exec_bin(insights_core_t)
 corecmd_exec_all_executables(insights_core_t)
@@ -354,14 +352,17 @@ optional_policy(`
     systemd_dbus_chat_timedated(insights_core_t)
     systemd_dbus_chat_localed(insights_core_t)
     systemd_exec_notify(insights_core_t)
+    systemd_passwd_agent_domtrans(insights_core_t)
     systemd_status_all_unit_files(insights_core_t)
     systemd_userdbd_stream_connect(insights_core_t)
 ')
 
 optional_policy(`
     userdom_search_user_tmp_dirs(insights_core_t)
+    userdom_use_inherited_user_ptys(insights_core_t)
     userdom_user_tmp_filetrans(insights_core_t, insights_core_tmp_t, dir)
     userdom_view_all_users_keys(insights_core_t)
+    userdom_watch_tmp_dirs(insights_core_t)
 ')
 
 optional_policy(`
