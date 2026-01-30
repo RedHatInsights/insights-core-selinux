@@ -147,6 +147,7 @@ optional_policy(`
 ')
 
 optional_policy(`
+    auth_filetrans_admin_home_content(insights_core_t)
     auth_read_passwd_file(insights_core_t)
     auth_write_motd_var_run_files(insights_core_t)
 ')
