@@ -61,6 +61,47 @@ interface(`insights_core_read_lib_files',`
 
 ########################################
 ## <summary>
+##    Start insights_client service
+## </summary>
+## <param name="domain">
+##    <summary>
+##    Domain allowed access
+##    </summary>
+## </param>
+#
+ifndef(`insights_client_service_start',`
+    interface(`insights_client_service_start',`
+        gen_require(`
+            type insights_client_unit_file_t;
+        ')
+
+        allow $1 insights_client_unit_file_t:service { status start };
+    ')
+')
+
+########################################
+## <summary>
+##    Stop insights_client service
+## </summary>
+## <param name="domain">
+##    <summary>
+##    Domain allowed access
+##    </summary>
+## </param>
+#
+ifndef(`insights_client_service_stop',`
+    interface(`insights_client_service_stop',`
+        gen_require(`
+            type insights_client_unit_file_t;
+        ')
+
+        allow $1 insights_client_unit_file_t:service { status stop };
+    ')
+')
+
+
+########################################
+## <summary>
 ##     Execute container in the container domain.
 ## </summary>
 ## <param name="domain">
