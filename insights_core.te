@@ -31,7 +31,7 @@ dontaudit insights_core_t self:capability sys_resource;
 allow insights_core_t self:capability { dac_read_search setgid sys_admin sys_rawio};
 allow insights_core_t self:capability2 { checkpoint_restore syslog };
 allow insights_core_t self:cap_userns sys_ptrace;
-allow insights_core_t self:process { getattr setpgid setsched };
+allow insights_core_t self:process { getattr setfscreate setpgid setsched };
 
 allow insights_core_t self:appletalk_socket create_socket_perms;
 allow insights_core_t self:ax25_socket create_socket_perms;
@@ -221,6 +221,14 @@ optional_policy(`
 ')
 
 optional_policy(`
+    gen_require(`
+        type init_var_run_t;
+    ')
+
+    create_fifo_files_pattern(insights_core_t, init_var_run_t, init_var_run_t)
+
+    init_create_pid_dirs(insights_core_t)
+    init_read_pipes(insights_core_t)
     init_reload_services(insights_core_t)
     init_rw_stream_sockets(insights_core_t)
     init_status(insights_core_t)
@@ -351,17 +359,20 @@ optional_policy(`
 ')
 
 optional_policy(`
-    systemd_dbus_chat_timedated(insights_core_t)
     systemd_dbus_chat_localed(insights_core_t)
+    systemd_dbus_chat_timedated(insights_core_t)
     systemd_exec_notify(insights_core_t)
+    systemd_passwd_watch_pid_dirs(insights_core_t)
     systemd_status_all_unit_files(insights_core_t)
     systemd_userdbd_stream_connect(insights_core_t)
 ')
 
 optional_policy(`
     userdom_search_user_tmp_dirs(insights_core_t)
+    userdom_use_inherited_user_ptys(insights_core_t)
     userdom_user_tmp_filetrans(insights_core_t, insights_core_tmp_t, dir)
     userdom_view_all_users_keys(insights_core_t)
+    userdom_watch_tmp_dirs(insights_core_t)
 ')
 
 optional_policy(`
