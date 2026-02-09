@@ -66,21 +66,17 @@ relabel_files_pattern(insights_core_t, insights_core_tmp_t, insights_core_tmp_t)
 
 ### Interactions with insights-client
 optional_policy(`
-    gen_require(`
-        type insights_client_unit_file_t;
-    ')
-
-    allow insights_core_t insights_client_unit_file_t:service { start stop };
-
-    insights_client_filetrans_named_content(insights_core_t)
+    insights_client_append_log(insights_core_t)
     insights_client_create_config(insights_core_t)
     insights_client_create_lib_dirs(insights_core_t)
-    insights_client_read_config(insights_core_t)
+    insights_client_filetrans_named_content(insights_core_t)
     insights_client_manage_config_rw(insights_core_t)
     insights_client_manage_lib_files(insights_core_t)
-    insights_client_append_log(insights_core_t)
     insights_client_manage_tmp_dirs(insights_core_t)
     insights_client_manage_tmp_files(insights_core_t)
+    insights_client_read_config(insights_core_t)
+    insights_client_service_start(insights_core_t)
+    insights_client_service_stop(insights_core_t)
 ')
 
 kernel_dgram_send(insights_core_t)
