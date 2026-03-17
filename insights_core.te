@@ -279,6 +279,8 @@ optional_policy(`
 ')
 
 optional_policy(`
+    miscfiles_manage_cert_dirs(insights_core_t)
+    miscfiles_manage_cert_files(insights_core_t)
     miscfiles_read_generic_certs(insights_core_t)
 ')
 
