@@ -143,6 +143,10 @@ optional_policy(`
 ')
 
 optional_policy(`
+    apache_exec_modules(insights_core_t)
+')
+
+optional_policy(`
     auth_read_passwd_file(insights_core_t)
     auth_write_motd_var_run_files(insights_core_t)
 ')
@@ -310,6 +314,10 @@ optional_policy(`
 optional_policy(`
     pcp_filetrans_named_content(insights_core_t)
     pcp_write_pid_sock_file(insights_core_t)
+')
+
+optional_policy(`
+    rhcs_rw_cluster_tmpfs(insights_core_t)
 ')
 
 optional_policy(`
