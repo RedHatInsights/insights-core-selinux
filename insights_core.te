@@ -140,6 +140,9 @@ optional_policy(`
 
 optional_policy(`
     anaconda_domtrans_install(insights_core_t)
+    # Fix AVC after leapp upgrade from insights-client register
+    anaconda_write_fifo_files_install(insights_core_t)
+    anaconda_ioctl_fifo_files_install(insights_core_t)
 ')
 
 optional_policy(`
