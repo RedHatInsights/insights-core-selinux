@@ -146,6 +146,11 @@ optional_policy(`
     apache_exec_modules(insights_core_t)
 ')
 
+# RHEL-185507: ipcs -s enumerates semaphores owned by various domains
+optional_policy(`
+    apache_read_semaphores(insights_core_t)
+')
+
 optional_policy(`
     auth_read_passwd_file(insights_core_t)
     auth_write_motd_var_run_files(insights_core_t)
@@ -375,6 +380,11 @@ optional_policy(`
     systemd_passwd_watch_pid_dirs(insights_core_t)
     systemd_status_all_unit_files(insights_core_t)
     systemd_userdbd_stream_connect(insights_core_t)
+')
+
+# RHEL-185507: ipcs -s enumerates semaphores owned by various domains
+optional_policy(`
+    unconfined_server_read_semaphores(insights_core_t)
 ')
 
 optional_policy(`
