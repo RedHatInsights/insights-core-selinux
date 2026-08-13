@@ -334,6 +334,11 @@ optional_policy(`
     rhsmcertd_manage_pid_files(insights_core_t)
     rhsmcertd_append_log(insights_core_t)
     rhsmcertd_create_log(insights_core_t)
+
+    # RHEL-180919: cache the AWS IMDS token under cloud-what
+    # Interfaces from selinux-policy PR #3312 (>= 38.1.84-1.el9, pre-GA)
+    cloud_what_create_cache_files(insights_core_t)
+    cloud_what_write_cache_files(insights_core_t)
 ')
 
 optional_policy(`
