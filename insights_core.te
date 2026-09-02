@@ -140,6 +140,26 @@ optional_policy(`
 
 optional_policy(`
     anaconda_domtrans_install(insights_core_t)
+    anaconda_ioctl_fifo_files_install(insights_core_t)
+    anaconda_write_fifo_files_install(insights_core_t)
+
+    # insights_client_t belongs to insights_client, not anaconda; require it explicitly.
+    optional_policy(`
+        gen_require(`
+            type insights_client_t;
+        ')
+
+        anaconda_read_state_install(insights_client_t)
+    ')
+
+    # install_t belongs to anaconda, not insights_client; require it explicitly.
+    optional_policy(`
+        gen_require(`
+            type install_t;
+        ')
+
+        insights_client_domtrans(install_t)
+    ')
 ')
 
 optional_policy(`
@@ -336,7 +356,7 @@ optional_policy(`
     rhsmcertd_create_log(insights_core_t)
 
     # RHEL-180919: cache the AWS IMDS token under cloud-what
-    # Interfaces from selinux-policy PR #3312 (>= 38.1.84-1.el9, pre-GA)
+    # Interfaces from selinux-policy PR #3312 (>= 38.1.84-1.el9)
     cloud_what_create_cache_files(insights_core_t)
     cloud_what_write_cache_files(insights_core_t)
 ')
@@ -372,6 +392,10 @@ optional_policy(`
 optional_policy(`
     ssh_exec(insights_core_t)
     ssh_exec_sshd(insights_core_t)
+')
+
+optional_policy(`
+    sssd_stream_connect(insights_core_t)
 ')
 
 optional_policy(`
