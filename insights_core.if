@@ -2,65 +2,6 @@
 
 ########################################
 ## <summary>
-##     Allow explicit transition to insights_core_t domain.
-## </summary>
-## <param name="domain">
-## <summary>
-##     Domain allowed to transition.
-## </summary>
-## </param>
-#
-interface(`insights_core_domtrans',`
-    gen_require(`
-        type insights_core_t;
-    ')
-    allow $1 insights_core_t: process transition;
-    allow insights_core_t $1:fd use;
-    allow insights_core_t $1:fifo_file rw_file_perms;
-    allow insights_core_t $1:process sigchld;
-    allow insights_core_t $1:dir search_dir_perms;
-')
-
-########################################
-## <summary>
-##     Write to an insights_core unnamed pipe.
-## </summary>
-## <param name="domain">
-## <summary>
-##     Domain allowed access.
-## </summary>
-## </param>
-#
-interface(`insights_core_write_pipes',`
-    gen_require(`
-        type insights_core_t;
-    ')
-    allow $1 insights_core_t:fifo_file write_fifo_file_perms;
-')
-
-
-########################################
-## <summary>
-##     Read insights_client lib files.
-## </summary>
-## <param name="domain">
-## <summary>
-##     Domain allowed access.
-## </summary>
-## </param>
-#
-interface(`insights_core_read_lib_files',`
-    gen_require(`
-        type insights_core_var_lib_t;
-    ')
-    files_search_var_lib($1)
-    read_files_pattern($1, insights_core_var_lib_t, insights_core_var_lib_t)
-    allow $1 insights_core_var_lib_t:file map;
-')
-
-
-########################################
-## <summary>
 ##    Start insights_client service
 ## </summary>
 ## <param name="domain">
@@ -162,22 +103,105 @@ ifndef(`kernel_io_uring_use',`
     ')
 ')
 
-########################################
+#######################################
 ## <summary>
-##     Execute sap in sap unconfined domain.
+##      Allow a domain ioctl to install fifo files.
 ## </summary>
 ## <param name="domain">
 ## <summary>
-##     Domain allowed to transition.
+##      Domain allowed access.
 ## </summary>
 ## </param>
 #
-ifndef(`sap_unconfined_domtrans',`
-    interface(`sap_unconfined_domtrans',`
+ifndef(`anaconda_ioctl_fifo_files_install',`
+    interface(`anaconda_ioctl_fifo_files_install',`
         gen_require(`
-            type sap_unconfined_t, sap_exec_t;
+                type install_t;
         ')
-        corecmd_search_bin($1)
-        domtrans_pattern($1, sap_exec_t, sap_unconfined_t)
+
+        allow $1 install_t:fifo_file ioctl;
+    ')
+')
+
+#######################################
+## <summary>
+##      Allow a domain write to install fifo files.
+## </summary>
+## <param name="domain">
+## <summary>
+##      Domain allowed access.
+## </summary>
+## </param>
+#
+ifndef(`anaconda_write_fifo_files_install',`
+    interface(`anaconda_write_fifo_files_install',`
+        gen_require(`
+                type install_t;
+        ')
+
+        allow $1 install_t:fifo_file write;
+    ')
+')
+
+#######################################
+## <summary>
+##	Read install_t process state files.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed access.
+## </summary>
+## </param>
+#
+ifndef(`anaconda_read_state_install',`
+    interface(`anaconda_read_state_install',`
+	gen_require(`
+		type install_t;
+	')
+
+	kernel_search_proc($1)
+	ps_process_pattern($1, install_t)
+    ')
+')
+
+########################################
+## <summary>
+##	Create cloud-what cache files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+ifndef(`cloud_what_create_cache_files',`
+    interface(`cloud_what_create_cache_files',`
+	gen_require(`
+		type cloud_what_var_cache_t;
+	')
+
+	files_search_var($1)
+	create_files_pattern($1, cloud_what_var_cache_t, cloud_what_var_cache_t)
+    ')
+')
+
+########################################
+## <summary>
+##	Write cloud-what cache files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+ifndef(`cloud_what_write_cache_files',`
+    interface(`cloud_what_write_cache_files',`
+	gen_require(`
+		type cloud_what_var_cache_t;
+	')
+
+	files_search_var($1)
+	write_files_pattern($1, cloud_what_var_cache_t, cloud_what_var_cache_t)
     ')
 ')
