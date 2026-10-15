@@ -205,3 +205,46 @@ ifndef(`cloud_what_write_cache_files',`
 	write_files_pattern($1, cloud_what_var_cache_t, cloud_what_var_cache_t)
     ')
 ')
+
+########################################
+## <summary>
+##     Connect TCP to ephemeral_port_t (e.g. local pmcd 44321).
+##     Fallback when selinux-policy does not generate
+##     corenet_tcp_connect_ephemeral_port.
+## </summary>
+## <param name="domain">
+## <summary>
+##     Domain allowed access.
+## </summary>
+## </param>
+#
+ifndef(`corenet_tcp_connect_all_ephemeral_ports',`
+    interface(`corenet_tcp_connect_all_ephemeral_ports',`
+        gen_require(`
+            type ephemeral_port_t;
+        ')
+        allow $1 ephemeral_port_t:tcp_socket name_connect;
+    ')
+')
+
+########################################
+## <summary>
+##     Execute install helpers (rpm-ostree, ostree, anaconda)
+##     in the caller domain without transitioning to install_t.
+##     Fallback until selinux-policy provides this interface.
+## </summary>
+## <param name="domain">
+## <summary>
+##     Domain allowed access.
+## </summary>
+## </param>
+#
+ifndef(`anaconda_exec_install',`
+    interface(`anaconda_exec_install',`
+        gen_require(`
+            type install_exec_t;
+        ')
+        corecmd_search_bin($1)
+        can_exec($1, install_exec_t)
+    ')
+')
