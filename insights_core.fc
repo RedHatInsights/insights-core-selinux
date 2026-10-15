@@ -4,3 +4,6 @@
 /tmp/insights-client\.ppid      --      gen_context(system_u:object_r:insights_core_tmp_t,s0)
 /var/tmp/insights-client\.ppid  --      gen_context(system_u:object_r:insights_core_tmp_t,s0)
 /var/tmp/insights-client(/.*)?          gen_context(system_u:object_r:insights_core_tmp_t,s0)
+
+# RHEL-185505: label CrowdStrike falconctl for partial confinement
+/opt/CrowdStrike/falconctl[^/]*    --  gen_context(system_u:object_r:crowdstrike_exec_t,s0)

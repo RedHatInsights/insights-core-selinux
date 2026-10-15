@@ -18,6 +18,25 @@ files_type(insights_core_cache_t)
 type insights_core_tmp_t;
 files_tmp_file(insights_core_tmp_t)
 
+# RHEL-185505: CrowdStrike falconctl partial confinement
+type crowdstrike_t;
+role system_r types crowdstrike_t;
+domain_type(crowdstrike_t)
+
+optional_policy(`
+    unconfined_domain(crowdstrike_t)
+')
+
+type crowdstrike_exec_t;
+files_type(crowdstrike_exec_t)
+
+# Keep falconctl executable by init_t (falcon-sensor ExecStartPre) and other
+# system domains that had access when it was labeled usr_t.
+gen_require(`
+    attribute base_ro_file_type;
+')
+typeattribute crowdstrike_exec_t base_ro_file_type;
+
 ########################################
 #
 # insights_core local policy
@@ -449,4 +468,28 @@ optional_policy(`
 optional_policy(`
     virt_exec_virsh(insights_core_t)
     virt_stream_connect(insights_core_t)
+')
+
+########################################
+#
+# crowdstrike_t local policy
+#
+# RHEL-185505: transition insights_core_t to unconfined crowdstrike_t when
+# executing falconctl, so CrowdStrike can write its data files without
+# broadening insights_core_t permissions.
+#
+
+domtrans_pattern(insights_core_t, crowdstrike_exec_t, crowdstrike_t)
+
+# domtrans_pattern on selinux-policy <= 38.1.75 (RHEL 9.8) does not expand
+# the entrypoint permission. Explicit rule as a compatibility safety net.
+allow crowdstrike_t crowdstrike_exec_t:file entrypoint;
+
+# falcon-sensor.service runs falconctl in ExecStartPre as init_t; without a
+# transition it would hit the same write denials insights_core_t does.
+optional_policy(`
+    gen_require(`
+        type init_t;
+    ')
+    domtrans_pattern(init_t, crowdstrike_exec_t, crowdstrike_t)
 ')
