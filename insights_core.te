@@ -24,11 +24,12 @@ files_tmp_file(insights_core_tmp_t)
 #
 
 # dontaudit rule
+dontaudit insights_core_t self:capability sys_admin;
 dontaudit insights_core_t self:capability sys_resource;
 
 #permissive insights_core_t;
 
-allow insights_core_t self:capability { dac_read_search setgid sys_admin sys_rawio};
+allow insights_core_t self:capability { dac_read_search setgid sys_rawio};
 allow insights_core_t self:capability2 { checkpoint_restore syslog };
 allow insights_core_t self:cap_userns sys_ptrace;
 allow insights_core_t self:process { getattr setfscreate setpgid setsched };
@@ -97,7 +98,16 @@ corecmd_exec_bin(insights_core_t)
 corecmd_exec_all_executables(insights_core_t)
 
 corenet_tcp_bind_generic_node(insights_core_t)
-corenet_tcp_connect_all_ports(insights_core_t)
+# corenet_tcp_connect_all_ports(insights_core_t)
+# Proxy on this host is tcp/3128 squid_port_t (not all_ports).
+corenet_tcp_connect_squid_port(insights_core_t)
+# Direct console.redhat.com HTTPS when no proxy.
+corenet_tcp_connect_http_port(insights_core_t)
+# Satellite curl https://localhost:9090/features (IsSatellite).
+corenet_tcp_connect_websm_port(insights_core_t)
+# pmrep -> local pmcd (::1:44321) is labeled ephemeral_port_t.
+# RHEL interface name; fallback is in insights_core.if if missing.
+corenet_tcp_connect_all_ephemeral_ports(insights_core_t)
 corenet_udp_bind_generic_node(insights_core_t)
 
 dev_getattr_all_blk_files(insights_core_t)
@@ -138,8 +148,10 @@ optional_policy(`
     abrt_dbus_chat(insights_core_t)
 ')
 
+# Collect rpm-ostree/ostree status in the caller domain. Do not
+# transition to install_t (package install / OS image mutation).
 optional_policy(`
-    anaconda_domtrans_install(insights_core_t)
+    anaconda_exec_install(insights_core_t)
     anaconda_ioctl_fifo_files_install(insights_core_t)
     anaconda_write_fifo_files_install(insights_core_t)
 
@@ -313,9 +325,14 @@ optional_policy(`
     miscfiles_read_generic_certs(insights_core_t)
 ')
 
+# Run lsmod/modinfo in the caller domain. Do not transition to
+# kmod_t (kernel module load). /proc and sysfs are already granted
+# above (kernel_read_proc_files, dev_read_sysfs).
+# modutils_read_module_deps() lists modules dirs, reads *.ko, and
+# reads modules_dep_t (includes modutils_read_module_deps_files).
 optional_policy(`
-    modutils_domtrans_kmod(insights_core_t)
-    modutils_read_module_deps_files(insights_core_t)
+    modutils_exec_kmod(insights_core_t)
+    modutils_read_module_deps(insights_core_t)
 ')
 
 optional_policy(`
@@ -361,9 +378,12 @@ optional_policy(`
     cloud_what_write_cache_files(insights_core_t)
 ')
 
+# Run rpm -qa/-V/-qf in the caller domain. Do not transition to
+# rpm_t (RPM database writes / package install).
 optional_policy(`
     rpm_append_log(insights_core_t)
-    rpm_domtrans(insights_core_t)
+    rpm_exec(insights_core_t)
+    rpm_read_db(insights_core_t)
     rpm_manage_cache(insights_core_t)
     rpm_setattr_db_files(insights_core_t)
     rpm_signal(insights_core_t)
@@ -386,6 +406,8 @@ optional_policy(`
 optional_policy(`
     seutil_domtrans_semanage(insights_core_t)
     seutil_read_config(insights_core_t)
+    seutil_read_default_contexts(insights_core_t)
+    seutil_read_file_contexts(insights_core_t)
     seutil_read_module_store(insights_core_t)
 ')
 
@@ -405,7 +427,7 @@ optional_policy(`
 optional_policy(`
     systemd_dbus_chat_localed(insights_core_t)
     systemd_dbus_chat_timedated(insights_core_t)
-    systemd_exec_notify(insights_core_t)
+    systemd_notify_domtrans(insights_core_t)
     systemd_passwd_watch_pid_dirs(insights_core_t)
     systemd_status_all_unit_files(insights_core_t)
     systemd_userdbd_stream_connect(insights_core_t)
