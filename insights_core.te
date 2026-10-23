@@ -450,3 +450,22 @@ optional_policy(`
     virt_exec_virsh(insights_core_t)
     virt_stream_connect(insights_core_t)
 ')
+
+########################################
+#
+# third_party_crowdstrike_t local policy
+#
+# RHEL-185505: transition insights_core_t to unconfined third_party_crowdstrike_t
+# when executing falconctl, so CrowdStrike can write its data files without
+# broadening insights_core_t permissions.
+#
+
+type third_party_crowdstrike_t;
+type third_party_crowdstrike_exec_t;
+init_daemon_domain(third_party_crowdstrike_t, third_party_crowdstrike_exec_t)
+
+optional_policy(`
+    unconfined_domain(third_party_crowdstrike_t)
+')
+
+domtrans_pattern(insights_core_t, third_party_crowdstrike_exec_t, third_party_crowdstrike_t)
