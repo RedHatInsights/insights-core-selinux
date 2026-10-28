@@ -1,0 +1,21 @@
+type insights_core_exec_t;
+files_type(insights_core_exec_t)
+
+domain_entry_file(insights_core_t, insights_core_exec_t)
+
+optional_policy(`
+    gen_require(`
+        type rhc_collector_t;
+        type rhc_tmp_t;
+    ')
+
+    domtrans_pattern(rhc_collector_t, insights_core_exec_t, insights_core_t)
+    allow rhc_collector_t insights_core_t:process2 { nnp_transition nosuid_transition };
+
+    allow insights_core_t rhc_collector_t:fd use;
+    allow insights_core_t rhc_collector_t:fifo_file rw_fifo_file_perms;
+
+    manage_dirs_pattern(insights_core_t, rhc_tmp_t, rhc_tmp_t)
+    manage_files_pattern(insights_core_t, rhc_tmp_t, rhc_tmp_t)
+    files_search_tmp(insights_core_t)
+')
